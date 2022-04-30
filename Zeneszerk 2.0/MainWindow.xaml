@@ -1,0 +1,721 @@
+﻿<Window x:Class="Zeneszerk_2._0.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Zeneszerk_2._0"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
+        mc:Ignorable="d"
+        Title="Zene szerkesztő" Height="450" Width="950"
+        MinHeight="550"
+        MinWidth="1000"
+        Icon="Icon.ico"
+        Background="#FC766A"   
+        WindowStartupLocation="CenterScreen"   
+        >
+    <Window.Resources>
+        <local:Datas x:Key="datas"/>
+        <Color x:Key="TextColor">#5B84B1</Color>
+        <Brush x:Key="MainColor">#FC766A</Brush>
+        <Brush x:Key="SupColor">#5B84B1</Brush>
+        <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey }" Color="{DynamicResource TextColor}"/>
+        <Style x:Key="BordersMenu" x:Name="StyleBordersMenu"
+               TargetType="{x:Type Border}" >
+            <Style.Setters>
+                <Setter Property="Background" Value="{DynamicResource SupColor}"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="CornerRadius" Value="20"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Margin" Value="5,0"/>
+                <Setter Property="Grid.ColumnSpan" Value="2"/>
+            </Style.Setters>
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="MouseEnter">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation To="0.75"
+                                             Duration="00:00:00.01"
+                                             Storyboard.TargetProperty="(Button.Opacity)"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="MouseLeave">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation To="1.0"
+                                             Duration="00:00:00.01"
+                                             Storyboard.TargetProperty="(Button.Opacity)"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="Buttons" 
+               TargetType="{x:Type Button}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{x:Null}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ButtonsMenu" 
+               TargetType="{x:Type Button}" 
+               BasedOn="{StaticResource Buttons}">
+            <Style.Setters>
+                <Setter Property="Background" Value="{x:Null}"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="FontSize" Value="25"/>
+                <Setter Property="FontStyle" Value="Italic"/>
+                <Setter Property="Foreground" Value="{DynamicResource MainColor}"/>
+                <Setter Property="Cursor" Value="Hand"/>
+            </Style.Setters>
+        </Style>
+        <Style x:Key="LabelsInfo" 
+               TargetType="{x:Type Label}">
+            <Style.Setters>
+                <Setter Property="FontWeight" Value="Heavy"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="FontSize" Value="40"/>
+            </Style.Setters>
+        </Style>
+        <Style x:Key="ButtonsPathsAdd"
+               TargetType="{x:Type Button}"
+               BasedOn="{StaticResource Buttons}">
+            <Style.Setters>
+                <Setter Property="Background" Value="{x:Null}"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource SupColor}"/>
+                <Setter Property="BorderThickness" Value="2"/>
+                <Setter Property="Cursor" Value="Hand"/>
+            </Style.Setters>
+        </Style>
+        <Style x:Key="TextBoxPaths" TargetType="{x:Type TextBox}">
+            <Style.Setters>
+                <Setter Property="Background" Value="{DynamicResource SupColor}"/>
+                <Setter Property="Margin" Value="10,3"/>
+                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="Foreground" Value="{DynamicResource MainColor}"/>
+                <Setter Property="Cursor" Value="IBeam"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+            </Style.Setters>
+        </Style>
+        <Style x:Key="ButtonsPathsDelete"
+               TargetType="{x:Type Button}"
+               BasedOn="{StaticResource Buttons}">
+            <Style.Setters>
+                <Setter Property="Background" Value="{x:Null}"/>
+                <Setter Property="Margin" Value="0,3,3,3"/>
+                <Setter Property="Grid.Column" Value="1"/>
+                <Setter Property="Cursor" Value="Hand"/>
+            </Style.Setters>
+        </Style>
+        <Style x:Key="LabelThemes" TargetType="{x:Type Label}">
+            <Style.Setters>
+                <Setter Property="Foreground" Value="{DynamicResource SupColor}"/>
+                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="FontStyle" Value="Italic"/>
+            </Style.Setters>
+        </Style>
+        <Style x:Key="ButtonThemesColorChange"
+               TargetType="{x:Type Button}" 
+               BasedOn="{StaticResource Buttons}">
+            <Style.Setters>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Cursor" Value="Hand"/>
+            </Style.Setters>
+        </Style>
+        <Style x:Key="BorderThemesColorChange"
+               TargetType="{x:Type Border}">
+            <Style.Setters>
+                <Setter Property="HorizontalAlignment" Value="Right"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="0,5,30,0"/>
+                <Setter Property="MinHeight" Value="20"/>
+                <Setter Property="MinWidth" Value="20"/>
+                <Setter Property="Cursor" Value="Hand"/>
+            </Style.Setters>
+                
+        </Style>
+        <Style x:Key="TextBlockSongEdit" TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="{DynamicResource SupColor}"/>
+            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+            <Setter Property="FontSize" Value="15"/>
+        </Style>
+        <Style x:Key="TextBlockEditorTitle" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Foreground" Value="{DynamicResource SupColor}"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,0,0,2"/>
+            <Setter Property="Padding" Value="2,0"/>
+        </Style>
+        <Style x:Key="BorderEditorTitle" TargetType="{x:Type Border}">
+            <Setter Property="BorderThickness" Value="1,0,1,2"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource SupColor}"/>
+            <Setter Property="Cursor" Value="ScrollS"/>
+        </Style>
+    </Window.Resources>
+    
+    <Grid x:Name="GridMain">
+        <Grid x:Name="GridMenu" Visibility="Hidden">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid x:Name="GridMainMenu">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="11*"/>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="11*"/>
+                </Grid.ColumnDefinitions>
+
+                <Border x:Name="BorderMenuNewMusic"
+                        Style="{StaticResource BordersMenu}"
+                        Grid.Row="1"
+                        Grid.RowSpan="2"                       
+                        MouseLeftButtonDown="ButtonMenuNewMusic_Click">
+                    <Button x:Name="ButtonMenuNewMusic"
+                            Style="{StaticResource ButtonsMenu}"
+                            Content="Hozzáadás"
+                            Click="ButtonMenuNewMusic_Click"
+                            />
+                </Border>
+                <Border x:Name="BorderMenuEditMusic"
+                        Style="{StaticResource BordersMenu}"
+                        Grid.Row="5"
+                        Grid.RowSpan="2"
+                        MouseLeftButtonDown="ButtonMenuEditMusic_Click">
+                    <Button x:Name="ButtonMenuEditMusic"
+                            Style="{StaticResource ButtonsMenu}"
+                            Content="Módosítás"
+                            Click="ButtonMenuEditMusic_Click"
+                            />
+                </Border>
+                <Border x:Name="BorderMenuSettingsMusic"
+                        Style="{StaticResource BordersMenu}"
+                        Grid.Row="9"
+                        Grid.RowSpan="2"
+                        MouseLeftButtonDown="ButtonMenuSettingsMusic_Click">
+                    <Button x:Name="ButtonMenuSettingsMusic"
+                            Style="{StaticResource ButtonsMenu}"
+                            Content="Beállítások"
+                            Click="ButtonMenuSettingsMusic_Click"
+                            />
+                </Border>
+                <Border x:Name="BorderMenuInfoMusic"
+                        Style="{StaticResource BordersMenu}"
+                        Grid.Row="13"
+                        Grid.RowSpan="2"
+                        MouseLeftButtonDown="ButtonMenuInfoMusic_Click">
+                    <Button x:Name="ButtonMenuInfoMusic"
+                            Style="{StaticResource ButtonsMenu}"
+                            Content="Infó"
+                            Click="ButtonMenuInfoMusic_Click"
+                            />
+                </Border>
+                <Border x:Name="BorderMenuExitMusic"
+                        Style="{StaticResource BordersMenu}"
+                        Grid.Row="17"
+                        Grid.RowSpan="2"
+                        MouseLeftButtonDown="ButtonMenuExitMusic_Click">
+                    <Button x:Name="ButtonMenuExitMusic"
+                            Style="{StaticResource ButtonsMenu}"
+                            Content="Kilépés"
+                            Click="ButtonMenuExitMusic_Click"
+                            />
+                </Border>
+                
+                <Border x:Name="BorderCircleTop"
+                        Background="{DynamicResource SupColor}"
+                        BorderThickness="0"
+                        CornerRadius="100"
+                        Grid.Row="6"
+                        Grid.RowSpan="2"
+                        Grid.Column="2"
+                        >
+                    <Rectangle x:Name="CircleTop"
+                               />
+                </Border>
+                <Rectangle x:Name="RectangleCenter1"
+                           Fill="{DynamicResource SupColor}"
+                           Grid.Column="1"
+                           Grid.ColumnSpan="2"
+                           Grid.Row="9"
+                           Grid.RowSpan="2"
+                           />
+                <Rectangle x:Name="RectangleCenter"
+                           Fill="{DynamicResource SupColor}"
+                           Grid.Column="2"
+                           Grid.Row="7"
+                           Grid.RowSpan="6"
+                           />
+                <Border x:Name="BorderCircleBottom"
+                        Background="{DynamicResource SupColor}"
+                        BorderThickness="0"
+                        Grid.Column="2"
+                        CornerRadius="100"
+                        Grid.Row="12"
+                        Grid.RowSpan="2"
+                        >
+                    <Rectangle x:Name="CircleBottom"
+                               />
+                </Border>
+                <Border x:Name="BorderSideMenuSettingsPaths"
+                        Style="{StaticResource BordersMenu}"
+                        Grid.Column="2"
+                        Grid.Row="6"
+                        Grid.RowSpan="2"
+                        Grid.ColumnSpan="2"
+                        MouseLeftButtonDown="ButtonSideMenuSettingsPaths_Click"
+                        >
+                    <Button x:Name="ButtonSideMenuSettingsPaths"
+                            Style="{StaticResource ButtonsMenu}"
+                            Content="Elérési utak"
+                            Click="ButtonSideMenuSettingsPaths_Click"
+                            />
+                </Border>
+                <Border x:Name="BorderSideMenuSettingsThemes"
+                        Style="{StaticResource BordersMenu}"
+                        Grid.Column="2"
+                        Grid.Row="12"
+                        Grid.RowSpan="2"
+                        Grid.ColumnSpan="2"
+                        MouseLeftButtonDown="ButtonSideMenuSettingsThemes_Click">
+                    <Button x:Name="ButtonSideMenuSettingsThemes"
+                            Style="{StaticResource ButtonsMenu}"
+                            Content="Témák"
+                            Click="ButtonSideMenuSettingsThemes_Click"
+                            />
+                </Border>
+            </Grid>
+
+            <Grid x:Name="GridMenuDisplay"
+              Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Grid x:Name="GridInfo" Visibility="Hidden">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Label 
+                           Style="{StaticResource LabelsInfo}">
+                        <Label.Content>
+                            <TextBlock TextDecorations="Underline"
+                                       Text="Információk"/>
+                        </Label.Content>
+                    </Label>
+                    <Label Content="-A programot készítette: Gerosz"
+                           Style="{StaticResource LabelsInfo}"
+                           Grid.Row="1"
+                           FontSize="20"/>
+                </Grid>
+                <Grid x:Name="GridPaths" Visibility="Hidden">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Label 
+                           Style="{StaticResource LabelsInfo}">
+                        <Label.Content>
+                            <TextBlock TextDecorations="Underline"
+                                       Text="Elérési utak"/>
+                        </Label.Content>
+                    </Label>
+                    <Label Content="Honnan (Az 1. az új számok helye):"
+                           Grid.Row="1"
+                           FontSize="20"
+                           FontWeight="Bold"
+                        />
+                    <Grid x:Name="GridPathsFrom1"
+                          Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="TextBoxPathsFrom1"
+                             TextChanged="TextBoxPathsFrom1_TextChanged"
+                             LostFocus="TextBoxPaths_LostFocus"
+                             Style="{StaticResource TextBoxPaths}"
+                             Visibility="Visible"
+                        />
+                        <Button x:Name="ButtonpathsFromDelete1"
+                            HorizontalAlignment="Right"
+                            Style="{StaticResource ButtonsPathsDelete}"
+                            Click="ButtonpathsFromDelete1_Click">
+                            <Button.Content>
+                                <fa:ImageAwesome Icon="TrashOutline" Foreground="{DynamicResource SupColor}"/>
+                            </Button.Content>
+                        </Button>
+                    </Grid>
+                    <Grid x:Name="GridPathsFrom2"
+                          Grid.Row="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <TextBox x:Name="TextBoxPathsFrom2"
+                             TextChanged="TextBoxPathsFrom2_TextChanged"
+                             LostFocus="TextBoxPaths_LostFocus"
+                             Style="{StaticResource TextBoxPaths}"
+                        />
+                        <Button x:Name="ButtonpathsFromDelete2"
+                            HorizontalAlignment="Right"
+                            Style="{StaticResource ButtonsPathsDelete}"
+                            Click="ButtonpathsFromDelete2_Click">
+                            <Button.Content>
+                                <fa:ImageAwesome Icon="TrashOutline" Foreground="{DynamicResource SupColor}"/>
+                            </Button.Content>
+                        </Button>
+                    </Grid>
+                    <Grid x:Name="GridPathsFrom3"
+                          Grid.Row="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="TextBoxPathsFrom3"
+                             TextChanged="TextBoxPathsFrom3_TextChanged"
+                             LostFocus="TextBoxPaths_LostFocus"
+                             Style="{StaticResource TextBoxPaths}"
+                        />
+                        <Button x:Name="ButtonpathsFromDelete3"
+                            HorizontalAlignment="Right"
+                            Style="{StaticResource ButtonsPathsDelete}"
+                            Click="ButtonpathsFromDelete3_Click">
+                            <Button.Content>
+                                <fa:ImageAwesome Icon="TrashOutline" Foreground="{DynamicResource SupColor}"/>
+                            </Button.Content>
+                        </Button>
+                    </Grid>
+                    <Grid x:Name="GridPathsFrom4"
+                          Grid.Row="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="TextBoxPathsFrom4"
+                             TextChanged="TextBoxPathsFrom4_TextChanged"
+                             Style="{StaticResource TextBoxPaths}"
+                             LostFocus="TextBoxPaths_LostFocus"
+                        />
+                        <Button x:Name="ButtonpathsFromDelete4"
+                            HorizontalAlignment="Right"
+                            Style="{StaticResource ButtonsPathsDelete}"
+                            Click="ButtonpathsFromDelete4_Click">
+                            <Button.Content>
+                                <fa:ImageAwesome Icon="TrashOutline" Foreground="{DynamicResource SupColor}"/>
+                            </Button.Content>
+                        </Button>
+                    </Grid>
+                    <Button x:Name="ButtonsPathsFromAdd"
+                            Grid.Row="2"
+                            Click="ButtonsPathsFromAdd_Click"
+                            Style="{StaticResource ButtonsPathsAdd}"
+                            Visibility="Hidden">
+                        <Button.Content>
+                            <fa:ImageAwesome Icon="Plus" Foreground="{DynamicResource SupColor}"/>
+                        </Button.Content>
+                    </Button>
+                    <Label Content="Hova:"
+                           Grid.Row="6"
+                           FontSize="20"
+                           FontWeight="Bold"
+                        />
+                    <Grid x:Name="GridPathsTo1"
+                          Grid.Row="7">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="TextBoxPathsTo1"
+                             TextChanged="TextBoxPathsTo1_TextChanged"
+                             Visibility="Visible"
+                             LostFocus="TextBoxPaths_LostFocus"
+                             Style="{StaticResource TextBoxPaths}"
+                        />
+                        <Button x:Name="ButtonpathsToDelete1"
+                            HorizontalAlignment="Right"
+                            Style="{StaticResource ButtonsPathsDelete}"
+                            Click="ButtonpathsToDelete1_Click">
+                            <Button.Content>
+                                <fa:ImageAwesome Icon="TrashOutline" Foreground="{DynamicResource SupColor}"/>
+                            </Button.Content>
+                        </Button>
+                    </Grid>
+                    <Grid x:Name="GridPathsTo2"
+                          Grid.Row="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="TextBoxPathsTo2"
+                             TextChanged="TextBoxPathsTo2_TextChanged"
+                             LostFocus="TextBoxPaths_LostFocus"
+                             Style="{StaticResource TextBoxPaths}"
+                        />
+                        <Button x:Name="ButtonpathsToDelete2"
+                            HorizontalAlignment="Right"
+                            Style="{StaticResource ButtonsPathsDelete}"
+                            Click="ButtonpathsToDelete2_Click">
+                            <Button.Content>
+                                <fa:ImageAwesome Icon="TrashOutline" Foreground="{DynamicResource SupColor}"/>
+                            </Button.Content>
+                        </Button>
+                    </Grid>
+                    <Grid x:Name="GridPathsTo3"
+                          Grid.Row="9">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="TextBoxPathsTo3"
+                             LostFocus="TextBoxPaths_LostFocus"
+                             TextChanged="TextBoxPathsTo3_TextChanged"
+                             Style="{StaticResource TextBoxPaths}"
+                        />
+                        <Button x:Name="ButtonpathsToDelete3"
+                            HorizontalAlignment="Right"
+                            Style="{StaticResource ButtonsPathsDelete}"
+                            Click="ButtonpathsToDelete3_Click">
+                            <Button.Content>
+                                <fa:ImageAwesome Icon="TrashOutline" Foreground="{DynamicResource SupColor}"/>
+                            </Button.Content>
+                        </Button>
+                    </Grid>
+                    <Grid x:Name="GridPathsTo4"
+                          Grid.Row="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="TextBoxPathsTo4"
+                             Grid.Row="10"
+                             LostFocus="TextBoxPaths_LostFocus"
+                             TextChanged="TextBoxPathsTo4_TextChanged"
+                             Style="{StaticResource TextBoxPaths}"
+                             />
+                        <Button x:Name="ButtonpathsToDelete4"
+                            HorizontalAlignment="Right"
+                            Style="{StaticResource ButtonsPathsDelete}"
+                            Click="ButtonpathsToDelete4_Click">
+                            <Button.Content>
+                                <fa:ImageAwesome Icon="TrashOutline" Foreground="{DynamicResource SupColor}"/>
+                            </Button.Content>
+                        </Button>
+                    </Grid>
+                    <Button x:Name="ButtonsPathsToAdd"
+                            Grid.Row="7"
+                            Click="ButtonsPathsToAdd_Click"
+                            Style="{StaticResource ButtonsPathsAdd}"
+                            Visibility="Hidden">
+                        <Button.Content>
+                            <fa:ImageAwesome Icon="Plus" Foreground="{DynamicResource SupColor}"/>
+                        </Button.Content>
+                    </Button>
+                </Grid>
+                <Grid x:Name="GridThemes" Visibility="Visible">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Label 
+                           Style="{StaticResource LabelsInfo}">
+                        <Label.Content>
+                            <TextBlock TextDecorations="Underline"
+                                       Text="Témák"/>
+                        </Label.Content>
+                    </Label>
+                    <Button x:Name="ButtonsThemesToAdd"
+                            Grid.Row="2"
+                            Click="ButtonsthemesToAdd_Click"
+                            Style="{StaticResource ButtonsPathsAdd}"
+                            Visibility="Hidden">
+                        <Button.Content>
+                            <fa:ImageAwesome Icon="Plus" Foreground="{DynamicResource SupColor}"/>
+                        </Button.Content>
+                    </Button>
+                    
+                </Grid>
+                <Label x:Name="VersionDP"                
+               Grid.Row="1"
+               HorizontalAlignment="Right" 
+               VerticalAlignment="Bottom" 
+               Content="Test"
+               FontSize="10" 
+               FontStyle="Italic"
+               FontWeight="Bold"
+               />
+            </Grid>
+        </Grid>
+        <Grid x:Name="GridMusicEditor">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="0.7*"/>
+                <RowDefinition Height="10*"/>
+            </Grid.RowDefinitions>
+            <Grid x:Name="GridEditortoolBar">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="ButtonBackFromMusicEditor"
+                        Style="{StaticResource Buttons}"
+                        Background="{x:Null}"
+                        Click="ButtonBackFromMusicEditor_Click"
+                        Cursor="Hand"
+                        Margin="2">
+                    <Button.Content>
+                        <fa:ImageAwesome Icon="ArrowCircleLeft" 
+                                        Foreground="{DynamicResource SupColor}"
+                                        />
+                    </Button.Content>
+                </Button>
+                <Border Grid.Column="1"
+                        CornerRadius="20"
+                        Margin="5, 2"
+                        Background="{DynamicResource SupColor}"
+                        Padding="5,0"
+                        >
+                    <TextBox x:Name="TBMusicEditorSearcher"
+                         Text="Search..."
+                         HorizontalContentAlignment="Left"
+                         VerticalContentAlignment="Center"
+                         FontSize="23"
+                         Background="{x:Null}"
+                         Foreground="{DynamicResource MainColor}"
+                         BorderThickness="0"
+                         />
+                </Border>
+                <ComboBox x:Name="CBMusicEditorSearchResults"
+                          Grid.Column="1"
+                          Margin="20,2"
+                          Panel.ZIndex="-1">
+                    
+                </ComboBox>
+            </Grid>
+            <Grid x:Name="GridTitles" 
+                  Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="18"/>
+                </Grid.ColumnDefinitions>
+                <Border BorderThickness="0,0,1,2"
+                        Style="{StaticResource BorderEditorTitle}"
+                        >
+                    <TextBlock Text="Fájlnév"
+                           Style="{StaticResource TextBlockEditorTitle}"
+                           />
+                </Border>
+                <Border Style="{StaticResource BorderEditorTitle}"
+                        Grid.Column="1"
+                        >
+                    <TextBlock Text="Előadó"
+                           Style="{StaticResource TextBlockEditorTitle}"
+                           />
+                </Border>
+                <Border Style="{StaticResource BorderEditorTitle}"
+                        Grid.Column="2"
+                        >
+                    <TextBlock Text="Cím"
+                           Style="{StaticResource TextBlockEditorTitle}"
+                           />
+                </Border>
+                <Border Style="{StaticResource BorderEditorTitle}"
+                        Grid.Column="3"
+                        >
+                    <TextBlock Text="Műfaj"
+                           Style="{StaticResource TextBlockEditorTitle}"
+                           />
+                </Border>
+                <Border Style="{StaticResource BorderEditorTitle}"
+                        Grid.Column="4"
+                        >
+                    <TextBlock Text="Album"
+                           Style="{StaticResource TextBlockEditorTitle}"
+                           />
+                </Border>
+                <Border Style="{StaticResource BorderEditorTitle}"
+                        Grid.Column="5"
+                        BorderThickness="1,0,0,2"
+                        />
+            </Grid>
+            <ScrollViewer Grid.Row="2"
+                          HorizontalScrollBarVisibility="Disabled"
+                          VerticalScrollBarVisibility="Visible"
+                          CanContentScroll="True"
+                          >
+                <Border BorderBrush="{DynamicResource SupColor}"
+                        BorderThickness="0,0,2,0">
+                    <StackPanel x:Name="StackPanelSongs">
+
+                    </StackPanel>
+                </Border>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</Window>

@@ -1,0 +1,239 @@
+﻿<Window x:Class="Zeneszerk_2._0.Colorsetter"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Zeneszerk_2._0"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
+        mc:Ignorable="d"
+        Title="Colorsetter" Height="350" Width="500"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        Background="#FC766A"
+        
+        >
+    <Window.Resources>
+        <local:Datas x:Key="datas"/>
+        <Color x:Key="TextColor">#5B84B1</Color>
+        <Brush x:Key="MainColor">#FC766A</Brush>
+        <Brush x:Key="SupColor">#5B84B1</Brush>
+        <Brush x:Key="New Color">#000000</Brush>
+        <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey }" Color="{DynamicResource TextColor}"/>
+        <Style x:Key="Buttons" 
+               TargetType="{x:Type Button}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{x:Null}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style x:Key="StyleBorder" TargetType="{x:Type Border}">
+            <Style.Setters>
+                <Setter Property="Grid.Row" Value="2"/>
+                <Setter Property="CornerRadius" Value="15"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Background" Value="{DynamicResource SupColor}"/>
+                <Setter Property="VerticalAlignment" Value="Bottom"/>
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="Padding" Value="10, 5"/>
+                <Setter Property="Margin" Value="3"/>
+            </Style.Setters>
+        </Style>
+        <Style x:Key="StyleButton" TargetType="{x:Type Button}" BasedOn="{StaticResource Buttons}">
+            <Style.Setters>
+                <Setter Property="FontSize" Value="27"/>
+                <Setter Property="Foreground" Value="{DynamicResource MainColor}"/>
+                <Setter Property="Cursor" Value="Hand"/>
+            </Style.Setters>
+        </Style>
+        <Style x:Key="StyleLabe" TargetType="{x:Type Label}">
+            <Style.Setters>
+                <Setter Property="FontSize" Value="20"/>
+            </Style.Setters>
+        </Style>
+        <Style x:Key="StyleTextBox" TargetType="{x:Type TextBox}">
+            <Style.Setters>
+                <Setter Property="Margin" Value="110,0,100,3"/>
+                <Setter Property="HorizontalContentAlignment" Value="Right"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Background" Value="{DynamicResource SupColor}"/>
+                <Setter Property="Foreground" Value="{DynamicResource MainColor}"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Cursor" Value="IBeam"/>
+                <Setter Property="FontSize" Value="15"/>
+            </Style.Setters>
+        </Style>
+    </Window.Resources>
+    <Grid x:Name="Gridmain">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+        <Border Margin="100,2"
+                Grid.ColumnSpan="2"
+                BorderBrush="{DynamicResource SupColor}"
+                BorderThickness="2">
+            <Rectangle x:Name="RectangleColorShower"
+                   Fill="{DynamicResource New Color}"
+                   
+                                     
+                   />
+        </Border>
+        
+        <Grid x:Name="GridSetColorRGB"
+              Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Content="RGB szín kód"
+                   Style="{StaticResource StyleLabe}"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Right"
+                   Margin="0,0,20,0"
+                   />
+            <Label Content="Red"
+                   Grid.Row="1"
+                   Style="{StaticResource StyleLabe}"
+                   HorizontalAlignment="Right"
+                   Margin="0,0,20,0"
+                   />
+            <TextBox x:Name="TextBoxRGBRed"
+                     Grid.Row="1"
+                     Style="{StaticResource StyleTextBox}"
+                     TextChanged="TextBoxRGBRed_TextChanged"
+                     />
+            <Label Content="Green"
+                   Grid.Row="2"
+                   Style="{StaticResource StyleLabe}"
+                   HorizontalAlignment="Right"
+                   Margin="0,0,20,0"
+                   />
+            <TextBox x:Name="TextBoxRGBGreen"
+                     Grid.Row="2"
+                     Style="{StaticResource StyleTextBox}"
+                     TextChanged="TextBoxRGBGreen_TextChanged"
+                     />
+            <Label Content="Blue"
+                   Grid.Row="3"
+                   Style="{StaticResource StyleLabe}"
+                   HorizontalAlignment="Right"
+                   Margin="0,0,20,0"
+                   />
+            <TextBox x:Name="TextBoxRGBBlue"
+                     Grid.Row="3"
+                     Style="{StaticResource StyleTextBox}"
+                     TextChanged="TextBoxRGBblue_TextChanged"
+                     />
+        </Grid>
+        <Grid x:Name="GridSetColorHEX"
+              Grid.Row="1"
+              Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Content="HEX szín kód"
+                   Style="{StaticResource StyleLabe}"
+                   FontWeight="Bold"
+                   Margin="20,0,0,0"
+                   />
+            <Label Content="HEX"
+                   Grid.Row="2"
+                   Style="{StaticResource StyleLabe}" 
+                   Margin="20,0,0,0"
+                   />
+            <TextBox x:Name="TextBoxHEX"
+                     Grid.Row="2"
+                     Style="{StaticResource StyleTextBox}"
+                     TextChanged="TextBoxHEX_TextChanged"
+                     Margin="80,0,90,3"
+                     HorizontalContentAlignment="Left"
+                     />
+        </Grid>
+        
+        <Rectangle x:Name="RectSeparator"
+                   Fill="{DynamicResource SupColor}"
+                   Grid.ColumnSpan="2"
+                   Grid.Row="1"
+                   Width="4"
+                   Margin="0,5"
+                   HorizontalAlignment="Center"/>
+        <Border x:Name="BorderBalancer"
+                BorderBrush="{DynamicResource SupColor}"
+                BorderThickness="3"
+                Grid.Row="1"
+                Grid.ColumnSpan="2"
+                Width="26"
+                Height="26"
+                >
+            <Button x:Name="ButtonBalancer"
+                    Background="{DynamicResource MainColor}"
+                    Style="{StaticResource Buttons}"
+                    Margin="1"
+                    Click="ButtonBalancer_Click">
+                <Button.Content>
+                    <fa:ImageAwesome Icon="BalanceScale" Foreground="{DynamicResource SupColor}"/>
+                </Button.Content>
+            </Button>
+        </Border>
+        
+        <Border x:Name="BorderColorSetBack"
+                Style="{StaticResource StyleBorder}"
+                MouseLeftButtonDown="ButtonSetColorBack_Click">
+            <Button x:Name="ButtonSetColorBack"
+                    Content="Vissza"
+                    Background="{x:Null}"
+                    Style="{StaticResource StyleButton}"
+                    Click="ButtonSetColorBack_Click"
+                    />
+        </Border>
+        <Border x:Name="BorderColorSetSave"
+                Style="{StaticResource StyleBorder}"
+                Grid.Column="1"
+                HorizontalAlignment="Right"
+                MouseLeftButtonDown="ButtonSetColorSave_Click">
+            <Button x:Name="ButtonSetColorSave"
+                    Content="Mentés"
+                    Background="{x:Null}"
+                    Style="{StaticResource StyleButton}"
+                    Click="ButtonSetColorSave_Click"
+                    />
+        </Border>
+        <TextBlock Text="Ez a szín túl hasonló a párjához, kérlek válassz másikat!"
+                   Grid.Row="2"
+                   Grid.ColumnSpan="2"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   Margin="102,0,116,0"
+                   TextWrapping="Wrap"
+                   x:Name="TextBlockError"
+                   TextAlignment="Center"
+                   FontSize="18"                   
+                   FontWeight="Bold"
+                   MouseEnter="TextBlockError_MouseEnter"
+                   MouseLeave="TextBlockError_MouseLeave"
+                   Padding="3"
+                   Visibility="Hidden"
+                   />
+    </Grid>
+</Window>
